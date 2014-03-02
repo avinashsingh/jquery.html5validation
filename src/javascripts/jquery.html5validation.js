@@ -16,7 +16,7 @@ $( function () {
 
   // create error on UI
   function showError( element, errorText ) {
-    var html = $( "<div style='position: absolute;'>" + errorText + "</div>"),
+    var html = $( "<div style='position: absolute;' class='errorTxt'>" + errorText + "</div>"),
         $el = $( element );
 
     if ( $el.data("showingWarning") ) {
@@ -32,7 +32,7 @@ $( function () {
     $el.bind( "focus", removeWarning );
     setTimeout( removeWarning, 4000 );
 
-    $("body").add( html );
+    $("body").append( html );
 
     html.css( "top" , $el.offset().top + html.height() ).
         css( "left", $el.offset().left );
@@ -72,6 +72,7 @@ $( function () {
           return false;
         }
       }
+      return true;
     }
 
     function validate () {
@@ -81,12 +82,12 @@ $( function () {
     }
 
     $(document).on ( "submit", "form", function (e) {
-      var continued = false;
+      var continued = true;
       $.each( $(this).find("input"), function ( index, input) {
         if ( !continued ) return;
         if( !validate.call(input) ) {
-          continued = false;
           e.preventDefault();
+          continued = false;
         }
       });
     });
@@ -94,7 +95,7 @@ $( function () {
   };
 
   $.html5validation = function () {
-    if ( validations !== undefined ) {
+    if ( validations === undefined ) {
       validations = new Validations();
     }
     return validations;
